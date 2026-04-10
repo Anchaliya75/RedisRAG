@@ -1,0 +1,284 @@
+[
+  {
+    "expected": "physics.txt",
+    "clean": {
+      "query": "आइंस्टीन की सापेक्षता के सिद्धांत में गुरुत्वाकर्षण को कैसे समझाया गया है?",
+      "hits": [
+        {
+          "title": "physics.txt",
+          "similarity": 0.8079,
+          "snippet": "Einstein's general theory of relativity describes gravity not as a force but as ..."
+        },
+        {
+          "title": "space.txt",
+          "similarity": 0.6984,
+          "snippet": "Einstein's special theory of relativity fundamentally changed our understanding ..."
+        },
+        {
+          "title": "physics.txt",
+          "similarity": 0.4451,
+          "snippet": "Classical mechanics describes the motion of macroscopic objects under the influe..."
+        }
+      ],
+      "embed_ms": 290.82,
+      "search_ms": 29.37
+    },
+    "noisy": {
+      "query": "आइनस्टिन की सपेक्षता के सिधांत मे गुरुत्वाकरसन कसे समझाया गया",
+      "hits": [
+        {
+          "title": "physics.txt",
+          "similarity": 0.7705,
+          "snippet": "Einstein's general theory of relativity describes gravity not as a force but as ..."
+        },
+        {
+          "title": "space.txt",
+          "similarity": 0.7303,
+          "snippet": "Einstein's special theory of relativity fundamentally changed our understanding ..."
+        },
+        {
+          "title": "physics.txt",
+          "similarity": 0.4537,
+          "snippet": "Classical mechanics describes the motion of macroscopic objects under the influe..."
+        }
+      ],
+      "embed_ms": 36.96,
+      "search_ms": 3.54
+    }
+  },
+  {
+    "expected": "biology.txt",
+    "clean": {
+      "query": "प्रकाश संश्लेषण की प्रक्रिया में पौधे सूर्य के प्रकाश से ग्लूकोज कैसे बनाते हैं?",
+      "hits": [
+        {
+          "title": "biology.txt",
+          "similarity": 0.6838,
+          "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and..."
+        },
+        {
+          "title": "chemistry.txt",
+          "similarity": 0.4217,
+          "snippet": "Electrochemistry studies the relationship between electrical energy and chemical..."
+        },
+        {
+          "title": "biology.txt",
+          "similarity": 0.3886,
+          "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and..."
+        }
+      ],
+      "embed_ms": 31.64,
+      "search_ms": 2.53
+    },
+    "noisy": {
+      "query": "प्रकास सनसलेसन में पोधे suraj की रोसनी से glucose कैसे बनाते",
+      "hits": [
+        {
+          "title": "biology.txt",
+          "similarity": 0.4406,
+          "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and..."
+        },
+        {
+          "title": "chemistry.txt",
+          "similarity": 0.314,
+          "snippet": "Electrochemistry studies the relationship between electrical energy and chemical..."
+        },
+        {
+          "title": "biology.txt",
+          "similarity": 0.3018,
+          "snippet": "Mitosis is the process of cell division that produces two genetically identical ..."
+        }
+      ],
+      "embed_ms": 10.75,
+      "search_ms": 5.61
+    }
+  },
+  {
+    "expected": "ai.txt",
+    "clean": {
+      "query": "ट्रांसफॉर्मर मॉडल सेल्फ-अटेंशन का उपयोग करके भाषा को कैसे प्रोसेस करते हैं?",
+      "hits": [
+        {
+          "title": "ai.txt",
+          "similarity": 0.6639,
+          "snippet": "Natural language processing enables computers to understand, interpret, and gene..."
+        },
+        {
+          "title": "ai.txt",
+          "similarity": 0.5859,
+          "snippet": "Transformer models use self-attention mechanisms to process sequential data in p..."
+        },
+        {
+          "title": "biology.txt",
+          "similarity": 0.3859,
+          "snippet": "Protein synthesis is the process by which cells build proteins according to gene..."
+        }
+      ],
+      "embed_ms": 10.09,
+      "search_ms": 2.87
+    },
+    "noisy": {
+      "query": "transformer मोडल self attension का उपयोग करके लंगुएज को कैसे प्रोसेस",
+      "hits": [
+        {
+          "title": "ai.txt",
+          "similarity": 0.611,
+          "snippet": "Transformer models use self-attention mechanisms to process sequential data in p..."
+        },
+        {
+          "title": "math.txt",
+          "similarity": 0.3332,
+          "snippet": "Linear algebra studies vector spaces, matrices, linear transformations, and syst..."
+        },
+        {
+          "title": "ai.txt",
+          "similarity": 0.3137,
+          "snippet": "Natural language processing enables computers to understand, interpret, and gene..."
+        }
+      ],
+      "embed_ms": 31.86,
+      "search_ms": 1.68
+    }
+  },
+  {
+    "expected": "chemistry.txt",
+    "clean": {
+      "query": "आवर्त सारणी में तत्वों को परमाणु क्रमांक के अनुसार कैसे व्यवस्थित किया जाता है?",
+      "hits": [
+        {
+          "title": "chemistry.txt",
+          "similarity": 0.59,
+          "snippet": "The periodic table organizes all known chemical elements by increasing atomic nu..."
+        },
+        {
+          "title": "Periodic Table",
+          "similarity": 0.4385,
+          "snippet": "The periodic table organizes elements by atomic number and electron configuratio..."
+        },
+        {
+          "title": "chemistry.txt",
+          "similarity": 0.4019,
+          "snippet": "The periodic table organizes all known chemical elements by increasing atomic nu..."
+        }
+      ],
+      "embed_ms": 31.82,
+      "search_ms": 2.11
+    },
+    "noisy": {
+      "query": "आवरत सारनी में तत्वो को परमानु क्रमांक के अनुसार कैसे वेवस्थित",
+      "hits": [
+        {
+          "title": "math.txt",
+          "similarity": 0.4039,
+          "snippet": "Number theory is the branch of mathematics devoted to studying the properties an..."
+        },
+        {
+          "title": "chemistry.txt",
+          "similarity": 0.3841,
+          "snippet": "The periodic table organizes all known chemical elements by increasing atomic nu..."
+        },
+        {
+          "title": "math.txt",
+          "similarity": 0.3237,
+          "snippet": "Linear algebra studies vector spaces, matrices, linear transformations, and syst..."
+        }
+      ],
+      "embed_ms": 39.36,
+      "search_ms": 2.23
+    }
+  },
+  {
+    "expected": "space.txt",
+    "clean": {
+      "query": "ब्रह्मांड में डार्क मैटर और डार्क एनर्जी का क्या महत्व है?",
+      "hits": [
+        {
+          "title": "space.txt",
+          "similarity": 0.6398,
+          "snippet": "Astronomy is the scientific study of celestial objects, space, and the physical ..."
+        },
+        {
+          "title": "physics.txt",
+          "similarity": 0.5557,
+          "snippet": "A black hole is a region of spacetime where gravity is so strong that nothing, n..."
+        },
+        {
+          "title": "biology.txt",
+          "similarity": 0.408,
+          "snippet": "Ecosystems are communities of living organisms interacting with their physical e..."
+        }
+      ],
+      "embed_ms": 10.8,
+      "search_ms": 4.45
+    },
+    "noisy": {
+      "query": "ब्रमांड में dark matter और dark एनर्जी का क्या मेहत्व",
+      "hits": [
+        {
+          "title": "physics.txt",
+          "similarity": 0.6325,
+          "snippet": "A black hole is a region of spacetime where gravity is so strong that nothing, n..."
+        },
+        {
+          "title": "space.txt",
+          "similarity": 0.6231,
+          "snippet": "Astronomy is the scientific study of celestial objects, space, and the physical ..."
+        },
+        {
+          "title": "physics.txt",
+          "similarity": 0.3802,
+          "snippet": "Quantum mechanics describes the behavior of matter and energy at atomic and suba..."
+        }
+      ],
+      "embed_ms": 142.02,
+      "search_ms": 2.8
+    }
+  },
+  {
+    "expected": "cs.txt",
+    "clean": {
+      "query": "वेक्टर सर्च में एम्बेडिंग का उपयोग करके समान वस्तुओं को कैसे खोजा जाता है?",
+      "hits": [
+        {
+          "title": "cs.txt",
+          "similarity": 0.5509,
+          "snippet": "Vector search is a technique for finding similar items by comparing high-dimensi..."
+        },
+        {
+          "title": "ai.txt",
+          "similarity": 0.4232,
+          "snippet": "Transformer models use self-attention mechanisms to process sequential data in p..."
+        },
+        {
+          "title": "ai.txt",
+          "similarity": 0.4041,
+          "snippet": "Reinforcement learning trains agents to make sequential decisions by maximizing ..."
+        }
+      ],
+      "embed_ms": 11.07,
+      "search_ms": 11.68
+    },
+    "noisy": {
+      "query": "वेकटर सरच में embedding का उपयोग करके सामान वस्तुओ को कैसे खोजा",
+      "hits": [
+        {
+          "title": "cs.txt",
+          "similarity": 0.57,
+          "snippet": "Vector search is a technique for finding similar items by comparing high-dimensi..."
+        },
+        {
+          "title": "ai.txt",
+          "similarity": 0.3607,
+          "snippet": "Reinforcement learning trains agents to make sequential decisions by maximizing ..."
+        },
+        {
+          "title": "ai.txt",
+          "similarity": 0.3397,
+          "snippet": "Computer vision enables machines to interpret and understand visual information ..."
+        }
+      ],
+      "embed_ms": 41.41,
+      "search_ms": 3.13
+    }
+  }
+]

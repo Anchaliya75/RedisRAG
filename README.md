@@ -5,7 +5,7 @@ RAG (Retrieval-Augmented Generation) pipeline using Redis as a vector store, wit
 ## Stack
 
 - **Vector Store**: Redis Stack with HNSW index
-- **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2` (384 dims, CPU)
+- **Embeddings**: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (384 dims, CPU, supports 50+ languages including Hindi)
 - **Server**: FastAPI + Uvicorn
 - **Client Library**: RedisVL
 
@@ -95,16 +95,61 @@ PyTorch CPU inference has high variance due to OS thread scheduling. We benchmar
 
 **Fix applied**: Server sets `OMP_NUM_THREADS=1` and `torch.set_num_threads(1)` at startup. This gives ~2x lower median latency and ~12x lower variance, since a small model like MiniLM-L6-v2 doesn't benefit from multi-threading at single-query batch size.
 
+## Multilingual / Cross-lingual Retrieval
+
+The embedding model was swapped from `all-MiniLM-L6-v2` (English-only) to `paraphrase-multilingual-MiniLM-L12-v2` so that Devanagari (Hindi) queries can retrieve from the English corpus. Both models are 384 dims, so the existing Redis schema is unchanged — only a re-ingest is needed after the swap.
+
+### Benchmark
+
+`benchmark_multilingual.py` runs 6 test cases (one per topic — physics, biology, AI, chemistry, space, CS). Each test case has:
+
+- a **clean** Devanagari question, and
+- a **noisy** version simulating ASR transcription errors (dropped matras, swapped consonants like ब/व and श/स, mixed Devanagari + Romanized fragments)
+
+Run:
+
+```bash
+.venv/bin/python benchmark_multilingual.py
+```
+
+### Results
+
+| Query type | Top-1 correct | Notes |
+|---|---|---|
+| Clean Devanagari | **6 / 6** | All Hindi questions retrieve the matching English chunk |
+| Noisy / ASR-style | **4 / 6** | 2 misses (chemistry → math, space → physics) |
+
+Mean top-1 similarity drop clean → noisy: ~0.08.
+
+### Observations
+
+1. **Embeddings tolerate surface-level noise** (dropped matras, swapped consonants, missing words) **as long as the clean query already has high margin to the right doc.** Physics clean=0.81 → noisy=0.77 stays correct. Chemistry clean=0.59 → noisy=0.40 drifted to the math file because there wasn't much margin to begin with.
+2. **Mixed Hindi + Latin script works.** Queries with English words mid-sentence (`suraj`, `glucose`, `transformer`, `dark matter`) all retrieved correctly. In `cs.txt` the Latin token `embedding` actually *helped* — the noisy variant scored slightly higher than the clean one.
+3. **Failure mode is "near-miss to a semantically adjacent topic"**, not random garbage. Space → physics (black holes) and chemistry → math (number theory) are reasonable confusions for a small (118M param) multilingual model.
+
+### What this means for ASR pipelines
+
+If you're feeding noisy ASR transcripts of Hindi questions into this RAG setup:
+
+- Multilingual MiniLM is good enough for queries with clean similarity > ~0.6 — those tolerate moderate transcription errors.
+- For borderline queries (~0.5–0.6), small ASR errors can knock the right answer out of rank 1. Possible mitigations (not implemented):
+  - Retrieve top-k=5–10 instead of top-1 and let downstream code/LLM pick.
+  - Upgrade to `intfloat/multilingual-e5-base` (~278M params) for stronger cross-lingual ranking.
+  - Add a reranker pass (e.g., `BAAI/bge-reranker-v2-m3`) over the top-k.
+
+Full per-query results are saved to `multilingual_benchmark.json`.
+
 ## Project Structure
 
 ```
 RedisRAG/
-  app.py             # FastAPI server (model loaded once at startup)
-  config.py          # shared config (Redis URL, model, schema)
-  ingest_data.py     # standalone ingestion script
-  retrieval.py       # standalone retrieval script
-  entrypoint.sh      # setup script (venv, Docker, model download)
-  Makefile            # make setup / server / clean
+  app.py                       # FastAPI server (model loaded once at startup)
+  config.py                    # shared config (Redis URL, model, schema)
+  ingest_data.py               # standalone ingestion script
+  retrieval.py                 # standalone retrieval script
+  benchmark_multilingual.py    # cross-lingual (Hindi → English) benchmark
+  entrypoint.sh                # setup script (venv, Docker, model download)
+  Makefile                     # make setup / server / clean
   requirements.txt
   data/               # 10 topic files chunked by paragraph
     ai.txt

@@ -1,5 +1,5 @@
 REDIS_URL = "redis://:redis@localhost:6379"
-MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
 SCHEMA = {
     "index": {"name": "voice-index", "prefix": "voice:"},
