@@ -270,6 +270,70 @@ Latency tells us how fast the pipeline is. **Robustness** tells us whether the a
 | clean → very dirty | −0.1451 |
 | dirty → very dirty | −0.0020 |
 
+### Per-topic walkthrough
+
+The aggregate numbers above hide a lot of structure. Here are all 18 query runs grouped by topic, showing the actual queries we ran and what came back at rank 1.
+
+#### physics.txt
+
+| Level | Query | Top-1 file (paragraph) | Sim | ✓/✗ |
+|---|---|---|---:|:---:|
+| clean | `आइंस्टीन की सापेक्षता के सिद्धांत में गुरुत्वाकर्षण को कैसे समझाया गया है?` | physics.txt (general relativity) | 0.8079 | ✓ |
+| dirty | `आइनस्टिन की सपेक्षता मे gravity को कसे समझाया गुरुत्वकरसन` | physics.txt (general relativity) | 0.7912 | ✓ |
+| very dirty | `वो ainstain वाली theery जिसमे gravety wala कुछ था spacetime kuch वो` | space.txt (solar system) | 0.3900 | ✗ |
+
+The `ainstain` mangling killed the strongest anchor in the question. Without "Einstein" properly spelled, `spacetime` dragged it toward space topics. Note physics.txt was still in top-3 (rank 3 at sim=0.3677), so a `k=5` retrieval would have caught it.
+
+#### biology.txt
+
+| Level | Query | Top-1 file (paragraph) | Sim | ✓/✗ |
+|---|---|---|---:|:---:|
+| clean | `प्रकाश संश्लेषण की प्रक्रिया में पौधे सूर्य के प्रकाश से ग्लूकोज कैसे बनाते हैं?` | biology.txt (photosynthesis) | 0.6838 | ✓ |
+| dirty | `परकास सनस्लेसन में पौदा suraj की रोसनी से gluucose बनाता` | biology.txt (photosynthesis) | 0.3550 | ✓ |
+| very dirty | `vo पेड़ wala chemistry जिसमे sun light से sugar बनती photo कुछ` | biology.txt (photosynthesis) | 0.5070 | ✓ |
+
+The very-dirty version (sim=0.51) actually beat the dirty version (sim=0.36). Latin tokens `sun light sugar photo` pulled it toward the photosynthesis paragraph harder than the mangled Devanagari `परकास सनस्लेसन` did.
+
+#### ai.txt
+
+| Level | Query | Top-1 file (paragraph) | Sim | ✓/✗ |
+|---|---|---|---:|:---:|
+| clean | `ट्रांसफॉर्मर मॉडल सेल्फ-अटेंशन का उपयोग करके भाषा को कैसे प्रोसेस करते हैं?` | ai.txt (NLP) | 0.6639 | ✓ |
+| dirty | `transfarmer मॉडेल self atension से language कैसे process करता` | ai.txt (NLP) | 0.6059 | ✓ |
+| very dirty | `vo जो attention वाला model GPT जैसा mechanism sentence parse karne ka` | ai.txt (transformers) | 0.4576 | ✓ |
+
+In clean and dirty, rank 1 is the *NLP* paragraph (not the transformer paragraph the question is actually about), but it's still ai.txt so the top-1 check passes. In very dirty, where the literal token `GPT` appears, rank 1 finally lands on the transformer paragraph itself. This is a mild reminder that "correct file" is a coarser success metric than "correct paragraph" — for a downstream LLM that just needs *some* relevant context, both are fine.
+
+#### chemistry.txt
+
+| Level | Query | Top-1 file (paragraph) | Sim | ✓/✗ |
+|---|---|---|---:|:---:|
+| clean | `आवर्त सारणी में तत्वों को परमाणु क्रमांक के अनुसार कैसे व्यवस्थित किया जाता है?` | chemistry.txt (periodic table) | 0.5900 | ✓ |
+| dirty | `आवरत साराणी में elements को परमानु number के हिसाब से arrange` | chemistry.txt (periodic table) | 0.4243 | ✓ |
+| very dirty | `jo table mein hydrogen helium वाला है chemistry वाला periodic kuch` | chemistry.txt (periodic table) | 0.5990 | ✓ |
+
+Same counter-intuitive pattern: very dirty (0.60) beat both clean (0.59) and dirty (0.42). The very-dirty query is essentially a keyword dump (`hydrogen helium chemistry periodic table`) which is exactly what the source paragraph contains.
+
+#### space.txt
+
+| Level | Query | Top-1 file (paragraph) | Sim | ✓/✗ |
+|---|---|---|---:|:---:|
+| clean | `ब्रह्मांड में डार्क मैटर और डार्क एनर्जी का क्या महत्व है?` | space.txt (astronomy / dark matter) | 0.6398 | ✓ |
+| dirty | `ब्रमंद में dark मेटर और energy ka क्या मतलब है` | physics.txt (thermodynamics) | 0.3870 | ✗ |
+| very dirty | `vo जो universe me dark wala 95 percent जो अदृष्य है vo कुछ space वाला` | space.txt (astronomy) | 0.5053 | ✓ |
+
+This is the only case where the dirty version is *worse* than the very-dirty version *and* gets a wrong answer. Dropping `मैटर` (matter) and shortening `ब्रह्मांड → ब्रमंद` removed the dark-matter signal, leaving "energy" as the dominant token — which dragged it to thermodynamics. The very-dirty version added `universe`, `95 percent`, `अदृष्य` (invisible), `space` — restoring the astronomy anchor.
+
+#### cs.txt
+
+| Level | Query | Top-1 file (paragraph) | Sim | ✓/✗ |
+|---|---|---|---:|:---:|
+| clean | `वेक्टर सर्च में एम्बेडिंग का उपयोग करके समान वस्तुओं को कैसे खोजा जाता है?` | cs.txt (vector search) | 0.5509 | ✓ |
+| dirty | `वेकटर सरच मे embedding से similar items कैसे find` | cs.txt (vector search) | 0.5144 | ✓ |
+| very dirty | `ye jo HNSW vala database hai jisme similarity ke basis pe search hota semantic` | cs.txt (vector search) | 0.6066 | ✓ |
+
+Best-case demonstration of the keyword-anchoring effect. The very-dirty version is essentially ungrammatical Hinglish, but `HNSW`, `database`, `similarity`, `search`, `semantic` are all literal terms in the cs.txt vector search paragraph — so it scored *higher than the clean Devanagari version*.
+
 ### Headline finding: there's a robustness floor, not a degradation curve
 
 The most important number above is the `dirty → very dirty` transition: **−0.002**. Going from "moderately bad" to "really bad" did essentially nothing. The same number of queries got the right answer (5/6) and the mean similarity moved less than half a percent. This means dense multilingual embeddings have a floor below which additional surface-level corruption doesn't matter — once enough content keywords are present, the embedding lands in roughly the right region of the 384-dim vector space and stays there even as you mangle more grammar.
