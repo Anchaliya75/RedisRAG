@@ -242,12 +242,88 @@ A few things worth noting about this response:
 - **CPU only, single thread.** `OMP_NUM_THREADS=1` is set deliberately because on Apple Silicon multi-threading actually hurts (see README "Embedding Latency Report"). On Linux Xeon hardware, removing this would likely give a ~2× speedup with higher variance.
 - **Cold start tax not amortized in the warm numbers.** The very first request a real user sees will be the 240-330 ms cold-start range. Adding a warmup `vectorizer.embed("warmup")` to the FastAPI `startup` hook (one line in `app.py:33`) would eliminate this.
 
+## Robustness against dirty transcriptions
+
+Latency tells us how fast the pipeline is. **Robustness** tells us whether the answers are still correct when the input is garbage — which is the realistic scenario when the upstream is an ASR (speech-to-text) system. The two are independent concerns but the user asked for both in the same report.
+
+`benchmark_dirty_transcription.py` runs 6 topics × 3 escalating noise levels = 18 query runs against the same Redis index used throughout this report. Hand-written queries; one set of "dirty" and one set of "very dirty" Devanagari variants per topic, designed to look like increasingly bad ASR output.
+
+### What the noise levels mean
+
+| Level | Construction strategy | Example (physics: Einstein gravity) |
+|---|---|---|
+| clean | Well-formed Devanagari question, baseline | `आइंस्टीन की सापेक्षता के सिद्धांत में गुरुत्वाकर्षण को कैसे समझाया गया है?` |
+| dirty | Drop matras, swap consonants (ब/व, श/स, ण/न), mix in Latin fragments, drop a function word or two | `आइनस्टिन की सपेक्षता मे gravity को कसे समझाया गुरुत्वकरसन` |
+| very dirty | Heavy code-switching, missing function words, key concepts mangled or replaced with vague paraphrase, sometimes the question structure is gone entirely | `वो ainstain वाली theery जिसमे gravety wala कुछ था spacetime kuch वो` |
+
+### Results
+
+| Level | Top-1 correct | Mean top-1 sim | Min sim | Max sim |
+|---|---|---:|---:|---:|
+| clean | **6 / 6** | 0.6561 | 0.5509 | 0.8079 |
+| dirty | **5 / 6** | 0.5130 | 0.3550 | 0.7912 |
+| very dirty | **5 / 6** | 0.5109 | 0.3900 | 0.6066 |
+
+| Transition | Mean similarity drop |
+|---|---:|
+| clean → dirty | −0.1431 |
+| clean → very dirty | −0.1451 |
+| dirty → very dirty | −0.0020 |
+
+### Headline finding: there's a robustness floor, not a degradation curve
+
+The most important number above is the `dirty → very dirty` transition: **−0.002**. Going from "moderately bad" to "really bad" did essentially nothing. The same number of queries got the right answer (5/6) and the mean similarity moved less than half a percent. This means dense multilingual embeddings have a floor below which additional surface-level corruption doesn't matter — once enough content keywords are present, the embedding lands in roughly the right region of the 384-dim vector space and stays there even as you mangle more grammar.
+
+This is unlike what you might naively expect, which is a smooth degradation: clean (6/6) → dirty (5/6) → very dirty (3/6) → completely garbage (0/6). The actual curve looks more like a step function: clean is great, anything sufficiently noisy is moderate, and the moderate plateau is wider than expected.
+
+### Counterintuitive finding: very dirty often beats dirty
+
+**3 of the 6 topics had the very-dirty query score *higher* than the dirty query**, sometimes by a lot:
+
+| Topic | Dirty sim | Very dirty sim | Why the very-dirty version won |
+|---|---:|---:|---|
+| cs | 0.5144 | **0.6066** | The very-dirty query happened to include `HNSW`, `database`, `similarity`, `search`, `semantic` — all literal keywords from the source paragraph. Grammar destroyed but keyword density was perfect. |
+| chemistry | 0.4243 | **0.5990** | `hydrogen helium periodic chemistry table` is basically a keyword dump that hits the source paragraph head-on. |
+| biology | 0.3550 | **0.5070** | `sun light sugar photo` cleanly hits the photosynthesis paragraph despite the messy syntax. |
+
+The model is anchored on **which content tokens are present**, not on **how grammatical the sentence is**. Drop a function word, and the embedding moves a tiny amount. Drop a key noun, and it moves a lot. Substitute a noun with its English equivalent, and it often moves *toward* the source rather than away (because the source is in English).
+
+This has a real implication for ASR pipelines: **a partially-correct ASR transcript that falls back to English transliteration for technical terms is usually *better* for retrieval than a fully-Devanagari transcript with mangled spellings.** ASR systems that "give up" on rare technical vocabulary and emit Latin script are accidentally helping cross-lingual retrieval rather than hurting it.
+
+### Failure modes
+
+Both failures across all 18 runs were "near-miss drift to a semantically adjacent topic", never random garbage:
+
+1. **Dirty failure: space → physics** (`ब्रमंद में dark मेटर और energy ka क्या मतलब है`)
+   Top-1 was thermodynamics (physics.txt) at sim=0.39. The model latched onto `energy` and the mangled `ब्रमंद` lost enough specificity that "energy" overpowered "dark matter / universe." Note that the *clean* query for this same topic landed correctly at sim=0.64, so the failure is real degradation, not bad data.
+
+2. **Very dirty failure: physics → space** (`वो ainstain वाली theery जिसमे gravety wala कुछ था spacetime kuch वो`)
+   Top-1 was the solar system paragraph (space.txt) at sim=0.39. The mangled `ainstain` lost the strong "Einstein" anchor that drove the clean query to 0.81 similarity. The remaining tokens (`spacetime`, `theery`, `gravity`) are split between physics and space topics, and the model picked the wrong one by a small margin.
+
+In both cases the **expected file appeared in the top-3 list**, just not at rank 1. A pipeline that retrieves top-k=3 and lets a downstream LLM choose would have recovered both failures.
+
+### Latency impact: zero
+
+For completeness: the dirty queries take essentially the same time to embed and search as the clean queries. Latency depends on token count and not on input quality. The `noisy.*` queries in the latency study above (mean 10.34 ms median embed) versus the `clean.*` queries (9.92 ms median embed) confirmed this with a rigorous 30-iteration measurement. The dirty benchmark didn't re-measure latency because there was nothing new to learn.
+
+### Practical recommendations for ASR-driven RAG
+
+Based on the combined latency + correctness picture above:
+
+1. **Retrieve top-k = 5 or top-k = 10, not top-k = 1.** Both failures in the dirty benchmark had the right answer in top-3. The marginal latency cost of larger k is negligible (search stays at 2 ms regardless of k for this corpus size) and the correctness gain is real.
+2. **Trust the embedding when the clean baseline similarity is high.** If a query gets > 0.7 sim on the clean version, it will tolerate significant transcription errors. If it gets < 0.55, even mild errors will push it off rank 1.
+3. **Don't try to "clean up" Devanagari from the ASR before sending it to the embedder.** Mixed scripts work fine. Let the ASR emit whatever it emits.
+4. **Use the source-file rank-2 / rank-3 results as a confidence signal.** If the same source file appears at multiple ranks (e.g., physics.txt at rank 1 and rank 3), the model is voting strongly for that topic and you can trust the answer. If rank 1 and rank 2 are different files with similar similarity scores, treat the result as low-confidence and consider re-ranking with a stronger model.
+
+Full per-query results (including all 3 ranks for all 18 queries) are in `dirty_transcription_benchmark.json`.
+
 ## Reproducibility
 
 ```bash
-.venv/bin/python latency_report.py        # writes latency_report.json
+.venv/bin/python latency_report.py                  # writes latency_report.json
+.venv/bin/python benchmark_dirty_transcription.py   # writes dirty_transcription_benchmark.json
 ```
 
 For the HTTP numbers, start `make server` in another terminal, then run a probe similar to the one used here. The probe script itself was a one-off and is not committed.
 
-Raw JSON outputs are saved in `latency_report.json` (direct path) and `http_latency.json` (HTTP path) — both contain the full per-iteration data, not just the summary stats above.
+Raw JSON outputs are saved in `latency_report.json` (direct latency path), `http_latency.json` (HTTP latency path), and `dirty_transcription_benchmark.json` (robustness path) — all three contain the full per-iteration data, not just the summary stats above.

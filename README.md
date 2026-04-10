@@ -139,6 +139,44 @@ If you're feeding noisy ASR transcripts of Hindi questions into this RAG setup:
 
 Full per-query results are saved to `multilingual_benchmark.json`.
 
+### Dirty-transcription stress test
+
+To answer the question "what if the ASR output is *really* bad?", `benchmark_dirty_transcription.py` runs the same 6 topics at three escalating noise levels:
+
+- **clean** — well-formed Devanagari (baseline)
+- **dirty** — typical ASR errors: dropped matras, swapped consonants (श/स, ब/व), some Latin fragments
+- **very dirty** — heavy code-switching, missing function words, wrong/garbled content words, sometimes the question structure is gone entirely
+
+```bash
+.venv/bin/python benchmark_dirty_transcription.py
+```
+
+Results:
+
+| Level | Top-1 correct | Mean top-1 sim | Min sim | Max sim |
+|---|---|---:|---:|---:|
+| clean | **6 / 6** | 0.6561 | 0.55 | 0.81 |
+| dirty | **5 / 6** | 0.5130 | 0.36 | 0.79 |
+| very dirty | **5 / 6** | 0.5109 | 0.39 | 0.61 |
+
+**The system has a robustness *floor*, not a smooth degradation curve.** Going from "dirty" to "very dirty" basically didn't matter — same number of top-1 hits, essentially the same mean similarity (0.5130 vs 0.5109). The model embeds based on which content concepts are present, not on grammatical well-formedness.
+
+A surprising counter-intuitive finding: **3 of 6 "very dirty" queries scored *higher* than their "dirty" counterparts**, because the very-dirty versions happened to include more English keywords that match the source text directly:
+
+| Topic | Dirty sim | Very dirty sim | What helped the very-dirty version |
+|---|---:|---:|---|
+| cs | 0.5144 | **0.6066** | `HNSW`, `database`, `similarity`, `search`, `semantic` all hit cs.txt's vector-search paragraph |
+| chemistry | 0.4243 | **0.5990** | `hydrogen helium periodic chemistry table` is basically a keyword dump for the source |
+| biology | 0.3550 | **0.5070** | `sun light sugar photo` hits photosynthesis content cleanly |
+
+**Practical takeaway for ASR pipelines:** a partially-correct ASR transcript with some English keywords intact is often *better* than a fully-Devanagari transcript with mangled spellings. The model anchors on content tokens, not on grammar. This means:
+
+- ASR systems that fall back to English transliteration for unknown technical terms (very common) are accidentally helping cross-lingual retrieval, not hurting it.
+- The failure mode is predictable: when the content keywords themselves are mangled (e.g., `Einstein` → `ainstain`), retrieval drifts to a semantically-adjacent topic (physics → space).
+- Both failures across all 18 query runs were near-miss drift to a related topic, never random garbage.
+
+Full per-query results saved to `dirty_transcription_benchmark.json`.
+
 ## Project Structure
 
 ```
@@ -147,8 +185,10 @@ RedisRAG/
   config.py                    # shared config (Redis URL, model, schema)
   ingest_data.py               # standalone ingestion script
   retrieval.py                 # standalone retrieval script
-  benchmark_multilingual.py    # cross-lingual (Hindi → English) benchmark
-  entrypoint.sh                # setup script (venv, Docker, model download)
+  benchmark_multilingual.py        # cross-lingual (Hindi → English) benchmark
+  benchmark_dirty_transcription.py # noisy ASR-style robustness benchmark (3 noise levels)
+  latency_report.py                # detailed latency profiler (per-query stats)
+  entrypoint.sh                    # setup script (venv, Docker, model download)
   Makefile                     # make setup / server / clean
   requirements.txt
   data/               # 10 topic files chunked by paragraph

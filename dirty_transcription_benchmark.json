@@ -1,0 +1,545 @@
+{
+  "config": {
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "k": 3,
+    "n_topics": 6
+  },
+  "per_level_summary": {
+    "clean": {
+      "top1_correct": 6,
+      "mean_top1_sim": 0.6561,
+      "min_top1_sim": 0.5509,
+      "max_top1_sim": 0.8079
+    },
+    "dirty": {
+      "top1_correct": 5,
+      "mean_top1_sim": 0.513,
+      "min_top1_sim": 0.355,
+      "max_top1_sim": 0.7912
+    },
+    "very dirty": {
+      "top1_correct": 5,
+      "mean_top1_sim": 0.5109,
+      "min_top1_sim": 0.39,
+      "max_top1_sim": 0.6066
+    }
+  },
+  "cases": [
+    {
+      "expected": "physics.txt",
+      "variants": [
+        {
+          "level": "clean",
+          "query": "आइंस्टीन की सापेक्षता के सिद्धांत में गुरुत्वाकर्षण को कैसे समझाया गया है?",
+          "top1_correct": true,
+          "embed_ms": 36.72,
+          "search_ms": 33.0,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "physics.txt",
+              "similarity": 0.8079,
+              "snippet": "Einstein's general theory of relativity describes gravity not as a force but as the curvat..."
+            },
+            {
+              "rank": 2,
+              "title": "space.txt",
+              "similarity": 0.6984,
+              "snippet": "Einstein's special theory of relativity fundamentally changed our understanding of space, ..."
+            },
+            {
+              "rank": 3,
+              "title": "physics.txt",
+              "similarity": 0.4451,
+              "snippet": "Classical mechanics describes the motion of macroscopic objects under the influence of for..."
+            }
+          ]
+        },
+        {
+          "level": "dirty",
+          "query": "आइनस्टिन की सपेक्षता मे gravity को कसे समझाया गुरुत्वकरसन",
+          "top1_correct": true,
+          "embed_ms": 35.26,
+          "search_ms": 3.6,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "physics.txt",
+              "similarity": 0.7912,
+              "snippet": "Einstein's general theory of relativity describes gravity not as a force but as the curvat..."
+            },
+            {
+              "rank": 2,
+              "title": "space.txt",
+              "similarity": 0.6919,
+              "snippet": "Einstein's special theory of relativity fundamentally changed our understanding of space, ..."
+            },
+            {
+              "rank": 3,
+              "title": "physics.txt",
+              "similarity": 0.4169,
+              "snippet": "A black hole is a region of spacetime where gravity is so strong that nothing, not even li..."
+            }
+          ]
+        },
+        {
+          "level": "very dirty",
+          "query": "वो ainstain वाली theery जिसमे gravety wala कुछ था spacetime kuch वो",
+          "top1_correct": false,
+          "embed_ms": 32.9,
+          "search_ms": 3.98,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "space.txt",
+              "similarity": 0.39,
+              "snippet": "Our solar system formed approximately 4.6 billion years ago from a collapsing cloud of gas..."
+            },
+            {
+              "rank": 2,
+              "title": "space.txt",
+              "similarity": 0.3757,
+              "snippet": "Einstein's special theory of relativity fundamentally changed our understanding of space, ..."
+            },
+            {
+              "rank": 3,
+              "title": "physics.txt",
+              "similarity": 0.3677,
+              "snippet": "A black hole is a region of spacetime where gravity is so strong that nothing, not even li..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "expected": "biology.txt",
+      "variants": [
+        {
+          "level": "clean",
+          "query": "प्रकाश संश्लेषण की प्रक्रिया में पौधे सूर्य के प्रकाश से ग्लूकोज कैसे बनाते हैं?",
+          "top1_correct": true,
+          "embed_ms": 33.24,
+          "search_ms": 3.3,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "biology.txt",
+              "similarity": 0.6838,
+              "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon di..."
+            },
+            {
+              "rank": 2,
+              "title": "chemistry.txt",
+              "similarity": 0.4217,
+              "snippet": "Electrochemistry studies the relationship between electrical energy and chemical reactions..."
+            },
+            {
+              "rank": 3,
+              "title": "biology.txt",
+              "similarity": 0.3886,
+              "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon di..."
+            }
+          ]
+        },
+        {
+          "level": "dirty",
+          "query": "परकास सनस्लेसन में पौदा suraj की रोसनी से gluucose बनाता",
+          "top1_correct": true,
+          "embed_ms": 9.79,
+          "search_ms": 5.06,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "biology.txt",
+              "similarity": 0.355,
+              "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon di..."
+            },
+            {
+              "rank": 2,
+              "title": "Photosynthesis",
+              "similarity": 0.2017,
+              "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon di..."
+            },
+            {
+              "rank": 3,
+              "title": "biology.txt",
+              "similarity": 0.1761,
+              "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon di..."
+            }
+          ]
+        },
+        {
+          "level": "very dirty",
+          "query": "vo पेड़ wala chemistry जिसमे sun light से sugar बनती photo कुछ",
+          "top1_correct": true,
+          "embed_ms": 32.01,
+          "search_ms": 2.38,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "biology.txt",
+              "similarity": 0.507,
+              "snippet": "Photosynthesis is the process by which green plants convert sunlight, water, and carbon di..."
+            },
+            {
+              "rank": 2,
+              "title": "chemistry.txt",
+              "similarity": 0.3515,
+              "snippet": "Electrochemistry studies the relationship between electrical energy and chemical reactions..."
+            },
+            {
+              "rank": 3,
+              "title": "physics.txt",
+              "similarity": 0.291,
+              "snippet": "Optics is the branch of physics that studies the behavior and properties of light and its ..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "expected": "ai.txt",
+      "variants": [
+        {
+          "level": "clean",
+          "query": "ट्रांसफॉर्मर मॉडल सेल्फ-अटेंशन का उपयोग करके भाषा को कैसे प्रोसेस करते हैं?",
+          "top1_correct": true,
+          "embed_ms": 10.48,
+          "search_ms": 2.43,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "ai.txt",
+              "similarity": 0.6639,
+              "snippet": "Natural language processing enables computers to understand, interpret, and generate human..."
+            },
+            {
+              "rank": 2,
+              "title": "ai.txt",
+              "similarity": 0.5859,
+              "snippet": "Transformer models use self-attention mechanisms to process sequential data in parallel, r..."
+            },
+            {
+              "rank": 3,
+              "title": "biology.txt",
+              "similarity": 0.3859,
+              "snippet": "Protein synthesis is the process by which cells build proteins according to genetic instru..."
+            }
+          ]
+        },
+        {
+          "level": "dirty",
+          "query": "transfarmer मॉडेल self atension से language कैसे process करता",
+          "top1_correct": true,
+          "embed_ms": 610.34,
+          "search_ms": 2.53,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "ai.txt",
+              "similarity": 0.6059,
+              "snippet": "Natural language processing enables computers to understand, interpret, and generate human..."
+            },
+            {
+              "rank": 2,
+              "title": "ai.txt",
+              "similarity": 0.5179,
+              "snippet": "Transformer models use self-attention mechanisms to process sequential data in parallel, r..."
+            },
+            {
+              "rank": 3,
+              "title": "Transformers",
+              "similarity": 0.2855,
+              "snippet": "Transformer models use self-attention mechanisms to process sequential data in parallel, r..."
+            }
+          ]
+        },
+        {
+          "level": "very dirty",
+          "query": "vo जो attention वाला model GPT जैसा mechanism sentence parse karne ka",
+          "top1_correct": true,
+          "embed_ms": 39.72,
+          "search_ms": 3.32,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "ai.txt",
+              "similarity": 0.4576,
+              "snippet": "Transformer models use self-attention mechanisms to process sequential data in parallel, r..."
+            },
+            {
+              "rank": 2,
+              "title": "ai.txt",
+              "similarity": 0.4322,
+              "snippet": "Natural language processing enables computers to understand, interpret, and generate human..."
+            },
+            {
+              "rank": 3,
+              "title": "cs.txt",
+              "similarity": 0.348,
+              "snippet": "Vector search is a technique for finding similar items by comparing high-dimensional numer..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "expected": "chemistry.txt",
+      "variants": [
+        {
+          "level": "clean",
+          "query": "आवर्त सारणी में तत्वों को परमाणु क्रमांक के अनुसार कैसे व्यवस्थित किया जाता है?",
+          "top1_correct": true,
+          "embed_ms": 11.95,
+          "search_ms": 2.07,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "chemistry.txt",
+              "similarity": 0.59,
+              "snippet": "The periodic table organizes all known chemical elements by increasing atomic number and r..."
+            },
+            {
+              "rank": 2,
+              "title": "Periodic Table",
+              "similarity": 0.4385,
+              "snippet": "The periodic table organizes elements by atomic number and electron configuration, reveali..."
+            },
+            {
+              "rank": 3,
+              "title": "chemistry.txt",
+              "similarity": 0.4019,
+              "snippet": "The periodic table organizes all known chemical elements by increasing atomic number and r..."
+            }
+          ]
+        },
+        {
+          "level": "dirty",
+          "query": "आवरत साराणी में elements को परमानु number के हिसाब से arrange",
+          "top1_correct": true,
+          "embed_ms": 10.59,
+          "search_ms": 1.48,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "chemistry.txt",
+              "similarity": 0.4243,
+              "snippet": "The periodic table organizes all known chemical elements by increasing atomic number and r..."
+            },
+            {
+              "rank": 2,
+              "title": "math.txt",
+              "similarity": 0.3687,
+              "snippet": "Number theory is the branch of mathematics devoted to studying the properties and relation..."
+            },
+            {
+              "rank": 3,
+              "title": "Periodic Table",
+              "similarity": 0.3235,
+              "snippet": "The periodic table organizes elements by atomic number and electron configuration, reveali..."
+            }
+          ]
+        },
+        {
+          "level": "very dirty",
+          "query": "jo table mein hydrogen helium वाला है chemistry वाला periodic kuch",
+          "top1_correct": true,
+          "embed_ms": 35.75,
+          "search_ms": 2.65,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "chemistry.txt",
+              "similarity": 0.599,
+              "snippet": "The periodic table organizes all known chemical elements by increasing atomic number and r..."
+            },
+            {
+              "rank": 2,
+              "title": "physics.txt",
+              "similarity": 0.453,
+              "snippet": "Nuclear fusion is the process where lighter atomic nuclei combine to form heavier nuclei, ..."
+            },
+            {
+              "rank": 3,
+              "title": "chemistry.txt",
+              "similarity": 0.4317,
+              "snippet": "Organic chemistry is the study of carbon-containing compounds and their properties, struct..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "expected": "space.txt",
+      "variants": [
+        {
+          "level": "clean",
+          "query": "ब्रह्मांड में डार्क मैटर और डार्क एनर्जी का क्या महत्व है?",
+          "top1_correct": true,
+          "embed_ms": 34.39,
+          "search_ms": 1.19,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "space.txt",
+              "similarity": 0.6398,
+              "snippet": "Astronomy is the scientific study of celestial objects, space, and the physical universe a..."
+            },
+            {
+              "rank": 2,
+              "title": "physics.txt",
+              "similarity": 0.5557,
+              "snippet": "A black hole is a region of spacetime where gravity is so strong that nothing, not even li..."
+            },
+            {
+              "rank": 3,
+              "title": "biology.txt",
+              "similarity": 0.408,
+              "snippet": "Ecosystems are communities of living organisms interacting with their physical environment..."
+            }
+          ]
+        },
+        {
+          "level": "dirty",
+          "query": "ब्रमंद में dark मेटर और energy ka क्या मतलब है",
+          "top1_correct": false,
+          "embed_ms": 460.0,
+          "search_ms": 3.32,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "physics.txt",
+              "similarity": 0.387,
+              "snippet": "Thermodynamics is the study of heat, energy, work, and how they relate to each other. The ..."
+            },
+            {
+              "rank": 2,
+              "title": "chemistry.txt",
+              "similarity": 0.3402,
+              "snippet": "Electrochemistry studies the relationship between electrical energy and chemical reactions..."
+            },
+            {
+              "rank": 3,
+              "title": "biology.txt",
+              "similarity": 0.3064,
+              "snippet": "Ecosystems are communities of living organisms interacting with their physical environment..."
+            }
+          ]
+        },
+        {
+          "level": "very dirty",
+          "query": "vo जो universe me dark wala 95 percent जो अदृष्य है vo कुछ space वाला",
+          "top1_correct": true,
+          "embed_ms": 12.8,
+          "search_ms": 12.22,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "space.txt",
+              "similarity": 0.5053,
+              "snippet": "Astronomy is the scientific study of celestial objects, space, and the physical universe a..."
+            },
+            {
+              "rank": 2,
+              "title": "physics.txt",
+              "similarity": 0.4914,
+              "snippet": "A black hole is a region of spacetime where gravity is so strong that nothing, not even li..."
+            },
+            {
+              "rank": 3,
+              "title": "space.txt",
+              "similarity": 0.3973,
+              "snippet": "Our solar system formed approximately 4.6 billion years ago from a collapsing cloud of gas..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "expected": "cs.txt",
+      "variants": [
+        {
+          "level": "clean",
+          "query": "वेक्टर सर्च में एम्बेडिंग का उपयोग करके समान वस्तुओं को कैसे खोजा जाता है?",
+          "top1_correct": true,
+          "embed_ms": 13.84,
+          "search_ms": 1.19,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "cs.txt",
+              "similarity": 0.5509,
+              "snippet": "Vector search is a technique for finding similar items by comparing high-dimensional numer..."
+            },
+            {
+              "rank": 2,
+              "title": "ai.txt",
+              "similarity": 0.4232,
+              "snippet": "Transformer models use self-attention mechanisms to process sequential data in parallel, r..."
+            },
+            {
+              "rank": 3,
+              "title": "ai.txt",
+              "similarity": 0.4041,
+              "snippet": "Reinforcement learning trains agents to make sequential decisions by maximizing cumulative..."
+            }
+          ]
+        },
+        {
+          "level": "dirty",
+          "query": "वेकटर सरच मे embedding से similar items कैसे find",
+          "top1_correct": true,
+          "embed_ms": 10.73,
+          "search_ms": 0.89,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "cs.txt",
+              "similarity": 0.5144,
+              "snippet": "Vector search is a technique for finding similar items by comparing high-dimensional numer..."
+            },
+            {
+              "rank": 2,
+              "title": "ai.txt",
+              "similarity": 0.2595,
+              "snippet": "Natural language processing enables computers to understand, interpret, and generate human..."
+            },
+            {
+              "rank": 3,
+              "title": "ai.txt",
+              "similarity": 0.2414,
+              "snippet": "Computer vision enables machines to interpret and understand visual information from digit..."
+            }
+          ]
+        },
+        {
+          "level": "very dirty",
+          "query": "ye jo HNSW vala database hai jisme similarity ke basis pe search hota semantic",
+          "top1_correct": true,
+          "embed_ms": 12.95,
+          "search_ms": 1.8,
+          "hits": [
+            {
+              "rank": 1,
+              "title": "cs.txt",
+              "similarity": 0.6066,
+              "snippet": "Vector search is a technique for finding similar items by comparing high-dimensional numer..."
+            },
+            {
+              "rank": 2,
+              "title": "cs.txt",
+              "similarity": 0.4597,
+              "snippet": "Databases are organized collections of structured data stored and accessed electronically...."
+            },
+            {
+              "rank": 3,
+              "title": "ai.txt",
+              "similarity": 0.3862,
+              "snippet": "Natural language processing enables computers to understand, interpret, and generate human..."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
