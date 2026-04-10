@@ -1,0 +1,338 @@
+{
+  "config": {
+    "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "index": "voice-index",
+    "dims": 384,
+    "k": 3,
+    "iterations": 30,
+    "warmup_iterations": 3,
+    "omp_num_threads": "1",
+    "torch_num_threads": 1
+  },
+  "startup": {
+    "model_load_ms": 11353.64,
+    "index_connect_ms": 2.55
+  },
+  "cold_start_query": {
+    "embed_ms": 38.06,
+    "search_ms": 31.59
+  },
+  "per_query": {
+    "clean.physics": {
+      "query": "आइंस्टीन की सापेक्षता के सिद्धांत में गुरुत्वाकर्षण को कैसे समझाया गया है?",
+      "len_chars": 74,
+      "embed": {
+        "n": 30,
+        "min": 8.992459006549325,
+        "max": 10.70604199776426,
+        "mean": 9.680235999500534,
+        "median": 9.651707998273196,
+        "p50": 9.651707998273196,
+        "p95": 10.431483146749088,
+        "p99": 10.651388887199573,
+        "stdev": 0.533400320815286
+      },
+      "search": {
+        "n": 30,
+        "min": 0.5136249965289608,
+        "max": 3.0192499980330467,
+        "mean": 1.6636568330189523,
+        "median": 1.6006249970814679,
+        "p50": 1.6006249970814679,
+        "p95": 2.587018752092263,
+        "p99": 2.9515349993744167,
+        "stdev": 0.5670205644401038
+      },
+      "total": {
+        "n": 30,
+        "min": 10.079791994940024,
+        "max": 12.991082992812153,
+        "mean": 11.343892832519487,
+        "median": 11.335270501149353,
+        "p50": 11.335270501149353,
+        "p95": 12.550464643209125,
+        "p99": 12.880339532639482,
+        "stdev": 0.8108773875322658
+      }
+    },
+    "clean.biology": {
+      "query": "प्रकाश संश्लेषण की प्रक्रिया में पौधे सूर्य के प्रकाश से ग्लूकोज कैसे बनाते हैं?",
+      "len_chars": 80,
+      "embed": {
+        "n": 30,
+        "min": 9.536750003462657,
+        "max": 35.51091700501274,
+        "mean": 12.296366733304845,
+        "median": 10.10037500236649,
+        "p50": 10.10037500236649,
+        "p95": 26.9695081482496,
+        "p99": 34.97500889294315,
+        "stdev": 6.318568400303433
+      },
+      "search": {
+        "n": 30,
+        "min": 0.4844579962082207,
+        "max": 5.423790993518196,
+        "mean": 1.1533498992018092,
+        "median": 0.7780414998705965,
+        "p50": 0.7780414998705965,
+        "p95": 3.6562768993462686,
+        "p99": 5.2310619256604705,
+        "stdev": 1.1480197008642339
+      },
+      "total": {
+        "n": 30,
+        "min": 10.074291989440098,
+        "max": 38.422165998781566,
+        "mean": 13.449716632506656,
+        "median": 11.016603999451036,
+        "p50": 11.016603999451036,
+        "p95": 29.516225003317246,
+        "p99": 38.1740228599665,
+        "stdev": 6.932814991342437
+      }
+    },
+    "clean.ai": {
+      "query": "ट्रांसफॉर्मर मॉडल सेल्फ-अटेंशन का उपयोग करके भाषा को कैसे प्रोसेस करते हैं?",
+      "len_chars": 75,
+      "embed": {
+        "n": 30,
+        "min": 9.21099999686703,
+        "max": 10.81174999853829,
+        "mean": 9.747576366983898,
+        "median": 9.723583498271182,
+        "p50": 9.723583498271182,
+        "p95": 10.356650000903755,
+        "p99": 10.683098747977056,
+        "stdev": 0.4366596704484559
+      },
+      "search": {
+        "n": 30,
+        "min": 0.5678339948644862,
+        "max": 3.8545419956790283,
+        "mean": 2.0817569997840715,
+        "median": 1.9745834979403298,
+        "p50": 1.9745834979403298,
+        "p95": 3.3070251458411803,
+        "p99": 3.7050710658513712,
+        "stdev": 0.6919476706677291
+      },
+      "total": {
+        "n": 30,
+        "min": 10.541083007410634,
+        "max": 13.718208996579051,
+        "mean": 11.829333366767969,
+        "median": 11.830896000901703,
+        "p50": 11.830896000901703,
+        "p95": 12.879116995100048,
+        "p99": 13.475068066691165,
+        "stdev": 0.730788292552748
+      }
+    },
+    "clean.cs": {
+      "query": "वेक्टर सर्च में एम्बेडिंग का उपयोग करके समान वस्तुओं को कैसे खोजा जाता है?",
+      "len_chars": 74,
+      "embed": {
+        "n": 30,
+        "min": 9.308332999353297,
+        "max": 18.0125000042608,
+        "mean": 10.698438833787804,
+        "median": 10.196999999607215,
+        "p50": 10.196999999607215,
+        "p95": 13.134329202875962,
+        "p99": 16.81238343349833,
+        "stdev": 1.691817991406508
+      },
+      "search": {
+        "n": 30,
+        "min": 1.4783339938730933,
+        "max": 5.693791994417552,
+        "mean": 2.314133399098258,
+        "median": 2.2483539978566114,
+        "p50": 2.2483539978566114,
+        "p95": 2.9824793484294787,
+        "p99": 4.945410745058327,
+        "stdev": 0.7477362159001468
+      },
+      "total": {
+        "n": 30,
+        "min": 11.245666995819192,
+        "max": 20.51195800595451,
+        "mean": 13.012572232886063,
+        "median": 12.551875002827728,
+        "p50": 12.551875002827728,
+        "p95": 15.26323179496103,
+        "p99": 19.01571547292406,
+        "stdev": 1.7262363309418924
+      }
+    },
+    "noisy.physics": {
+      "query": "आइनस्टिन की सपेक्षता के सिधांत मे गुरुत्वाकरसन कसे समझाया गया",
+      "len_chars": 61,
+      "embed": {
+        "n": 30,
+        "min": 9.20941599906655,
+        "max": 34.6767919982085,
+        "mean": 11.991579166109053,
+        "median": 10.249104001559317,
+        "p50": 10.249104001559317,
+        "p95": 15.510945649293717,
+        "p99": 29.1334538874071,
+        "stdev": 4.593304285837293
+      },
+      "search": {
+        "n": 30,
+        "min": 0.6375840021064505,
+        "max": 22.428625001339242,
+        "mean": 2.84987223300656,
+        "median": 2.127479499904439,
+        "p50": 2.127479499904439,
+        "p95": 5.317402047512589,
+        "p99": 17.825805319662337,
+        "stdev": 3.7857733839793277
+      },
+      "total": {
+        "n": 30,
+        "min": 10.45712500490481,
+        "max": 57.10541699954774,
+        "mean": 14.841451399115613,
+        "median": 12.60252050269628,
+        "p50": 12.60252050269628,
+        "p95": 18.263973090142827,
+        "p99": 46.01940574684707,
+        "stdev": 8.153225151986828
+      }
+    },
+    "noisy.biology": {
+      "query": "प्रकास सनसलेसन में पोधे suraj की रोसनी से glucose कैसे बनाते",
+      "len_chars": 60,
+      "embed": {
+        "n": 30,
+        "min": 9.253874995920341,
+        "max": 13.843541993992403,
+        "mean": 10.22516393350088,
+        "median": 9.938103503372986,
+        "p50": 9.938103503372986,
+        "p95": 11.739425002451753,
+        "p99": 13.29905481732567,
+        "stdev": 0.8710428525573569
+      },
+      "search": {
+        "n": 30,
+        "min": 1.270208005735185,
+        "max": 3.345666998939123,
+        "mean": 2.309102766836683,
+        "median": 2.2352289997797925,
+        "p50": 2.2352289997797925,
+        "p95": 3.0298767509520985,
+        "p99": 3.2595851396035873,
+        "stdev": 0.4813913470431909
+      },
+      "total": {
+        "n": 30,
+        "min": 11.15299900266109,
+        "max": 15.805833994818386,
+        "mean": 12.534266700337563,
+        "median": 12.445957996533252,
+        "p50": 12.445957996533252,
+        "p95": 14.400712504721014,
+        "p99": 15.493515888811089,
+        "stdev": 0.9470768346129523
+      }
+    },
+    "noisy.ai": {
+      "query": "transformer मोडल self attension का उपयोग करके लंगुएज को कैसे प्रोसेस",
+      "len_chars": 68,
+      "embed": {
+        "n": 30,
+        "min": 9.749374999955762,
+        "max": 35.975250000774395,
+        "mean": 11.77014450028461,
+        "median": 10.983312502503395,
+        "p50": 10.983312502503395,
+        "p95": 11.73878155022976,
+        "p99": 28.98269750046895,
+        "stdev": 4.513038460088279
+      },
+      "search": {
+        "n": 30,
+        "min": 1.157207996584475,
+        "max": 3.703709000546951,
+        "mean": 2.270056865624307,
+        "median": 2.26816649956163,
+        "p50": 2.26816649956163,
+        "p95": 3.304837502219016,
+        "p99": 3.671132141389535,
+        "stdev": 0.6218896160752116
+      },
+      "total": {
+        "n": 30,
+        "min": 11.579749996599276,
+        "max": 39.56662500422681,
+        "mean": 14.040201365908919,
+        "median": 13.296437500684988,
+        "p50": 13.296437500684988,
+        "p95": 15.012552899497678,
+        "p99": 32.60664936307878,
+        "stdev": 4.808117639275763
+      }
+    },
+    "noisy.cs": {
+      "query": "वेकटर सरच में embedding का उपयोग करके सामान वस्तुओ को कैसे खोजा",
+      "len_chars": 63,
+      "embed": {
+        "n": 30,
+        "min": 9.229167000739835,
+        "max": 36.703542005852796,
+        "mean": 11.084647333821826,
+        "median": 10.208208499534521,
+        "p50": 10.208208499534521,
+        "p95": 11.824912647352903,
+        "p99": 29.60770107289138,
+        "stdev": 4.800605699654037
+      },
+      "search": {
+        "n": 30,
+        "min": 0.5650829989463091,
+        "max": 16.834124995511957,
+        "mean": 2.5305694332928397,
+        "median": 2.057937497738749,
+        "p50": 2.057937497738749,
+        "p95": 3.6162107488053152,
+        "p99": 13.002512176171887,
+        "stdev": 2.762979416797501
+      },
+      "total": {
+        "n": 30,
+        "min": 10.551458995905705,
+        "max": 39.21012600767426,
+        "mean": 13.615216767114665,
+        "median": 12.168479002866661,
+        "p50": 12.168479002866661,
+        "p95": 22.24500044430898,
+        "p99": 36.269271962883074,
+        "stdev": 5.710576969761674
+      }
+    }
+  },
+  "sample_response": {
+    "query": "आइंस्टीन की सापेक्षता के सिद्धांत में गुरुत्वाकर्षण को कैसे समझाया गया है?",
+    "results": [
+      {
+        "title": "physics.txt",
+        "similarity": 0.8079,
+        "content": "Einstein's general theory of relativity describes gravity not as a force but as the curvature of spacetime caused by mass and energy. Massive objects like stars and planets bend the fabric of spacetime around them, and other objects follow curved paths through this warped geometry. The theory predicts gravitational lensing, where light bends around massive objects, and gravitational waves, ripples in spacetime caused by accelerating masses. LIGO first detected gravitational waves in 2015, confirming Einstein's century-old prediction."
+      },
+      {
+        "title": "space.txt",
+        "similarity": 0.6984,
+        "content": "Einstein's special theory of relativity fundamentally changed our understanding of space, time, and energy. The theory is built on two postulates: the laws of physics are the same in all inertial reference frames, and the speed of light in vacuum is constant for all observers. Time dilation causes moving clocks to tick slower relative to stationary observers, and length contraction shortens objects in the direction of motion. The famous equation E equals mc squared reveals that mass and energy are interchangeable, with a small amount of mass converting to enormous energy."
+      },
+      {
+        "title": "physics.txt",
+        "similarity": 0.4451,
+        "content": "Classical mechanics describes the motion of macroscopic objects under the influence of forces, based on Newton's three laws of motion. The first law states that objects remain at rest or in uniform motion unless acted upon by an external force. The second law relates force, mass, and acceleration through F equals ma. The third law states that every action has an equal and opposite reaction, governing interactions between objects."
+      }
+    ]
+  }
+}

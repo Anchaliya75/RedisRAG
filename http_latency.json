@@ -1,0 +1,60 @@
+{
+  "url": "http://localhost:8765/search",
+  "query": "आइंस्टीन की सापेक्षता के सिद्धांत में गुरुत्वाकर्षण को कैसे समझाया गया है?",
+  "n": 30,
+  "cold_wall_ms": 329.91424999636365,
+  "warm_wall": {
+    "min": 12.316917003772687,
+    "median": 14.08350000565406,
+    "mean": 14.637277867101753,
+    "p95": 17.40641700598644,
+    "p99": 18.618333000631537,
+    "max": 25.83549999690149
+  },
+  "warm_server_embed": {
+    "min": 9.46,
+    "median": 10.58,
+    "mean": 11.073333333333332,
+    "p95": 13.62,
+    "p99": 13.81,
+    "max": 14.71
+  },
+  "warm_server_search": {
+    "min": 0.74,
+    "median": 2.06,
+    "mean": 1.916,
+    "p95": 3.01,
+    "p99": 3.27,
+    "max": 3.53
+  },
+  "warm_http_overhead": {
+    "min": 0.974625001738314,
+    "median": 1.2673330055410048,
+    "mean": 1.6479445337684204,
+    "p95": 1.4864170059864428,
+    "p99": 1.5550840020412569,
+    "max": 13.31549999690149
+  },
+  "sample_response": {
+    "query": "आइंस्टीन की सापेक्षता के सिद्धांत में गुरुत्वाकर्षण को कैसे समझाया गया है?",
+    "results": [
+      {
+        "title": "physics.txt",
+        "content": "Einstein's general theory of relativity describes gravity not as a force but as the curvature of spacetime caused by mass and energy. Massive objects like stars and planets bend the fabric of spacetime around them, and other objects follow curved paths through this warped geometry. The theory predicts gravitational lensing, where light bends around massive objects, and gravitational waves, ripples in spacetime caused by accelerating masses. LIGO first detected gravitational waves in 2015, confirming Einstein's century-old prediction.",
+        "similarity": 0.8079
+      },
+      {
+        "title": "space.txt",
+        "content": "Einstein's special theory of relativity fundamentally changed our understanding of space, time, and energy. The theory is built on two postulates: the laws of physics are the same in all inertial reference frames, and the speed of light in vacuum is constant for all observers. Time dilation causes moving clocks to tick slower relative to stationary observers, and length contraction shortens objects in the direction of motion. The famous equation E equals mc squared reveals that mass and energy are interchangeable, with a small amount of mass converting to enormous energy.",
+        "similarity": 0.6984
+      },
+      {
+        "title": "physics.txt",
+        "content": "Classical mechanics describes the motion of macroscopic objects under the influence of forces, based on Newton's three laws of motion. The first law states that objects remain at rest or in uniform motion unless acted upon by an external force. The second law relates force, mass, and acceleration through F equals ma. The third law states that every action has an equal and opposite reaction, governing interactions between objects.",
+        "similarity": 0.4451
+      }
+    ],
+    "embed_ms": 10.26,
+    "search_ms": 1.91
+  }
+}
